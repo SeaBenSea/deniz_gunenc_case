@@ -1,14 +1,11 @@
 package pages;
 
+import config.Urls;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.Base64;
-
 public class CareersQAPage extends BasePage {
-    private static final String ENCODED_URL = "aHR0cHM6Ly91c2VpbnNpZGVyLmNvbS9jYXJlZXJzL3F1YWxpdHktYXNzdXJhbmNlLw==";
-
     @FindBy(xpath = "//*[text() = 'See all QA jobs']")
     public WebElement buttonSeeAllQAJobs;
 
@@ -17,8 +14,7 @@ public class CareersQAPage extends BasePage {
     }
 
     public CareersQAPage open() {
-        String decodedUrl = new String(Base64.getDecoder().decode(ENCODED_URL));
-        driver.get(decodedUrl);
+        driver.get(Urls.CAREERS_QA);
 
         return this;
     }
