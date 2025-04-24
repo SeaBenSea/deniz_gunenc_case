@@ -4,17 +4,16 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.ITestResult;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.*;
 
 public class BaseTest {
     protected WebDriver driver;
 
+    @Parameters("headless")
     @BeforeClass
-    public void start() {
+    public void start(@Optional("false") String headless) {
         // TODO: Change hardcoded driver
-        driver = new ChromeDriver(getChromeOptions());
+        driver = new ChromeDriver(getChromeOptions(headless));
         driver.manage().window().maximize();
     }
 
@@ -33,17 +32,26 @@ public class BaseTest {
         }
     }
 
-    private ChromeOptions getChromeOptions() {
+    private ChromeOptions getChromeOptions(String headless) {
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--disable-notifications",
+        options.addArguments(
+                "--disable-notifications",
                 "--remote-allow-origins=*",
                 "--disable-popup-blocking",
                 "--no-sandbox",
                 "--ignore-certificate-errors",
                 "--ignore-certificate-errors-spki-list",
-                "--suppress-message-center-popups");
+                "--suppress-message-center-popups"
+        );
         options.setAcceptInsecureCerts(true);
-        // TODO: Add condition or property to enable a headless option
+
+        boolean isHeadless = Boolean.parseBoolean(headless);
+        boolean isCI = Boolean.getBoolean("ci");
+
+        if (isHeadless || isCI) {
+            options.addArguments("--headless=new");
+        }
+
         return options;
     }
 }
