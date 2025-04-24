@@ -60,6 +60,15 @@ public class CaseStudyTest extends BaseTest {
 
         Assert.assertTrue(openPositionsQAPage.areFiltersAppliedCorrectly(optionLocationValue, optionDepartmentValue));
         Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed());
-        openPositionsQAPage.assertJobListIsFilteredCorrectly(optionLocationValue, optionDepartmentValue);
+        Assert.assertTrue(openPositionsQAPage.jobListMatches(optionLocationValue, optionDepartmentValue));
+    }
+
+    @Test(testName = "redirects to Lever when View Role clicked on job card")
+    public void fifthTest(){
+        OpenPositionsQAPage openPositionsQAPage = new OpenPositionsQAPage(driver).open();
+
+        Assert.assertTrue(openPositionsQAPage.isPageLoaded());
+        Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed());
+        Assert.assertTrue(openPositionsQAPage.verifyViewRole());
     }
 }

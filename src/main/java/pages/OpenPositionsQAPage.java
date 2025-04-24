@@ -6,35 +6,45 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.testng.Assert;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 
 public class OpenPositionsQAPage extends BasePage {
     private static final String ENCODED_URL = "aHR0cHM6Ly91c2VpbnNpZGVyLmNvbS9jYXJlZXJzL29wZW4tcG9zaXRpb25z";
+    private static final String URL = new String(Base64.getDecoder().decode(ENCODED_URL), StandardCharsets.UTF_8);
+    private static final String LEVER_DOMAIN = "jobs.lever.co";
+
     private static final By TITLE = By.cssSelector(".position-title");
     private static final By DEPARTMENT = By.cssSelector(".position-department");
     private static final By LOCATION = By.cssSelector(".position-location");
     private static final By JOB_CARDS = By.cssSelector(".position-list-item-wrapper");
 
     @FindBy(id = "career-position-list")
-    public WebElement sectionPositionList;
+    private WebElement sectionPositionList;
+
     @FindBy(xpath = "//div[contains(@class,'position-list-item-wrapper')]")
-    public List<WebElement> positionListItem;
+    private List<WebElement> positionListItem;
+
     @FindBy(id = "select2-filter-by-location-container")
-    public WebElement filterLocationBtn;
+    private WebElement filterLocationBtn;
+
     @FindBy(id = "select2-filter-by-department-container")
-    public WebElement filterDepartmentBtn;
+    private WebElement filterDepartmentBtn;
+
+    @FindBy(xpath = "(//div[contains(@class,'position-list-item-wrapper')])[1]")
+    private WebElement positionListItemFirst;
+
+    @FindBy(xpath = "(//a[text()='View Role'])[1]")
+    private WebElement linkViewRoleFirst;
 
     public OpenPositionsQAPage(WebDriver driver) {
         super(driver);
     }
 
     public OpenPositionsQAPage open() {
-        String decodedUrl = new String(Base64.getDecoder().decode(ENCODED_URL));
-        driver.get(decodedUrl);
-
+        driver.get(URL);
         return this;
     }
 
@@ -42,36 +52,29 @@ public class OpenPositionsQAPage extends BasePage {
         return isDisplayed(sectionPositionList) && !positionListItem.isEmpty();
     }
 
-    public By getFilterByXpath(String location) {
-        return By.xpath("//option[contains(text(), '" + location + "')]");
+    private By optionLocator(String text) {
+        return By.xpath(String.format("//option[contains(text(), '%s')]", text));
+    }
+
+    private void applyFilter(WebElement dropdownBtn, String value) {
+        dropdownBtn.click();                          // open the <select2> dropdown
+        By option = optionLocator(value);
+        wait.until(ExpectedConditions.elementToBeClickable(option)).click();
     }
 
     public void filterByLocation(String location) {
-        By locationFilterByXpath = getFilterByXpath(location);
-        wait.until(ExpectedConditions.presenceOfElementLocated(locationFilterByXpath));
-        click(filterLocationBtn);
-        click(locationFilterByXpath);
+        applyFilter(filterLocationBtn, location);
     }
 
-    public void filterByDepartment(String department) {
-        By departmentFilterByXpath = getFilterByXpath(department);
-        wait.until(ExpectedConditions.presenceOfElementLocated(departmentFilterByXpath));
-        click(filterDepartmentBtn);
-        click(departmentFilterByXpath);
+    public void filterByDepartment(String dept) {
+        applyFilter(filterDepartmentBtn, dept);
     }
 
     public boolean areFiltersAppliedCorrectly(String location, String department) {
-        String locationTitle = filterLocationBtn.getAttribute("title");
-        String departmentTitle = filterDepartmentBtn.getAttribute("title");
-
-        if (locationTitle == null || departmentTitle == null) {
-            return false;
-        }
-
-        return locationTitle.equals(location) && departmentTitle.equals(department);
+        return location.equals(filterLocationBtn.getAttribute("title")) && department.equals(filterDepartmentBtn.getAttribute("title"));
     }
 
-    public void assertJobListIsFilteredCorrectly(String location, String department) {
+    public boolean jobListMatches(String location, String department) {
         wait.until(driver -> driver.findElements(JOB_CARDS).stream().allMatch(item -> {
             try {
                 String loc = item.findElement(LOCATION).getText().trim();
@@ -82,16 +85,26 @@ public class OpenPositionsQAPage extends BasePage {
             }
         }));
 
-        List<WebElement> items = driver.findElements(JOB_CARDS);
+        return driver.findElements(JOB_CARDS).stream().allMatch(card -> {
+            String cardLoc = card.findElement(LOCATION).getText().trim();
+            String cardDept = card.findElement(DEPARTMENT).getText().trim();
+            String cardTitle = card.findElement(TITLE).getText().trim();
+            return cardLoc.equalsIgnoreCase(location) && cardDept.equalsIgnoreCase(department) && cardTitle.toLowerCase().contains(department.toLowerCase());
+        });
+    }
 
-        for (WebElement item : items) {
-            String cardTitle = item.findElement(TITLE).getText().trim();
-            String cardDepartment = item.findElement(DEPARTMENT).getText().trim();
-            String cardLocation = item.findElement(LOCATION).getText().trim();
+    public boolean verifyViewRole() {
+        hover(positionListItemFirst);
+        jsClick(linkViewRoleFirst);
 
-            Assert.assertTrue(cardTitle.toLowerCase().contains(department.toLowerCase()), "Job title does not contain the filter location");
-            Assert.assertTrue(cardDepartment.equalsIgnoreCase(department), "Job department does not contain the filter department");
-            Assert.assertTrue(cardLocation.equalsIgnoreCase(location), "Job location does not contain the filter location");
-        }
+        switchLastTab();
+        wait.until(ExpectedConditions.urlContains(LEVER_DOMAIN));
+
+        String currentUrl = driver.getCurrentUrl();
+
+        closeTab();
+        switchToMainTab();
+
+        return currentUrl != null && currentUrl.contains(LEVER_DOMAIN);
     }
 }

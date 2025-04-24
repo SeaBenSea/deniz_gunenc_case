@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
 
 public abstract class BasePage {
     private static final int TIMEOUT = 15;
@@ -108,5 +109,19 @@ public abstract class BasePage {
 
     private boolean isCookieConsentDisplayed() {
         return isDisplayed(cookieConsentBanner);
+    }
+
+    protected void switchLastTab() {
+        ArrayList<String> newTb = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(newTb.get(1));
+    }
+
+    protected void switchToMainTab() {
+        ArrayList<String> newTb = new ArrayList<>(driver.getWindowHandles());
+        driver.switchTo().window(newTb.getFirst());
+    }
+
+    protected void closeTab() {
+        driver.close();
     }
 }
