@@ -32,9 +32,9 @@ public class HomePage extends BasePage {
     }
 
     public CareersPage goToCareersPage() {
-        Assert.assertTrue(isHidden(linkCareers));
+        Assert.assertTrue(isHidden(linkCareers), "Link Careers is not hidden");
         hover(companyDropdown);
-        Assert.assertTrue(isDisplayed(linkCareers));
+        Assert.assertTrue(isDisplayed(linkCareers), "Link Careers is not displayed");
         clickLinkCareers();
         return new CareersPage(driver);
     }

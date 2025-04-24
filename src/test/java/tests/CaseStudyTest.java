@@ -7,7 +7,6 @@ import pages.CareersQAPage;
 import pages.HomePage;
 import pages.OpenPositionsQAPage;
 
-// TODO: Update assertions with fail messages
 // TODO: Remove hardcoded strings from tests
 public class CaseStudyTest extends BaseTest {
     private static final String optionLocationValue = "Istanbul, Turkiye";
@@ -17,7 +16,7 @@ public class CaseStudyTest extends BaseTest {
     public void firstTest() {
         HomePage homePage = new HomePage(driver).open();
 
-        Assert.assertTrue(homePage.isPageLoaded());
+        Assert.assertTrue(homePage.isPageLoaded(), "Home Page is not loaded");
     }
 
     @Test(testName = "should navigate to Careers Page from Home Page's Navbar")
@@ -25,42 +24,42 @@ public class CaseStudyTest extends BaseTest {
         HomePage homePage = new HomePage(driver).open();
         CareersPage careersPage = homePage.goToCareersPage();
 
-        Assert.assertTrue(careersPage.isPageLoaded());
-        Assert.assertTrue(careersPage.sectionsAreVisible());
-        Assert.assertTrue(careersPage.isTeamsButtonFunctional());
+        Assert.assertTrue(careersPage.isPageLoaded(), "Careers Page is not loaded");
+        Assert.assertTrue(careersPage.sectionsAreVisible(), "Careers Page sections are not visible");
+        Assert.assertTrue(careersPage.isTeamsButtonFunctional(), "Teams button is not functional");
     }
 
     @Test(testName = "should navigate to Open Positions page with *department* parameter set")
     public void thirdTest() {
         CareersQAPage careersQAPage = new CareersQAPage(driver).open();
 
-        Assert.assertTrue(careersQAPage.isPageLoaded());
+        Assert.assertTrue(careersQAPage.isPageLoaded(), "Open Positions Page is not loaded");
 
         OpenPositionsQAPage openPositionsQAPage = careersQAPage.clickSeeAllQAJobs();
 
-        Assert.assertTrue(openPositionsQAPage.isPageLoaded("open-positions/?department=qualityassurance"));
-        Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed());
+        Assert.assertTrue(openPositionsQAPage.isPageLoaded("open-positions/?department=qualityassurance"), "Open Positions Page is not loaded");
+        Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed(), "Positions section is not displayed");
 
         openPositionsQAPage.filterByLocation(optionLocationValue);
         openPositionsQAPage.filterByDepartment(optionDepartmentValue);
 
-        Assert.assertTrue(openPositionsQAPage.areFiltersAppliedCorrectly(optionLocationValue, optionDepartmentValue));
-        Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed());
+        Assert.assertTrue(openPositionsQAPage.areFiltersAppliedCorrectly(optionLocationValue, optionDepartmentValue), "Filters are not applied correctly");
+        Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed(), "Positions section is not displayed");
     }
 
     @Test(testName = "filtered job cards should relate to filters")
     public void fourthTest() {
         OpenPositionsQAPage openPositionsQAPage = new OpenPositionsQAPage(driver).open();
 
-        Assert.assertTrue(openPositionsQAPage.isPageLoaded());
-        Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed());
+        Assert.assertTrue(openPositionsQAPage.isPageLoaded(), "Open Positions Page is not loaded");
+        Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed(), "Positions section is not displayed");
 
         openPositionsQAPage.filterByLocation(optionLocationValue);
         openPositionsQAPage.filterByDepartment(optionDepartmentValue);
 
-        Assert.assertTrue(openPositionsQAPage.areFiltersAppliedCorrectly(optionLocationValue, optionDepartmentValue));
-        Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed());
-        Assert.assertTrue(openPositionsQAPage.jobListMatches(optionLocationValue, optionDepartmentValue));
+        Assert.assertTrue(openPositionsQAPage.areFiltersAppliedCorrectly(optionLocationValue, optionDepartmentValue), "Filters are not applied correctly");
+        Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed(), "Positions section is not displayed");
+        Assert.assertTrue(openPositionsQAPage.jobListMatches(optionLocationValue, optionDepartmentValue), "Job list does not match filters");
     }
 
     @Test(testName = "redirects to Lever when View Role clicked on job card")
@@ -68,8 +67,8 @@ public class CaseStudyTest extends BaseTest {
         OpenPositionsQAPage openPositionsQAPage = new OpenPositionsQAPage(driver).open();
         openPositionsQAPage.acceptCookieConsentBanner();
 
-        Assert.assertTrue(openPositionsQAPage.isPageLoaded());
-        Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed());
-        Assert.assertTrue(openPositionsQAPage.verifyViewRole());
+        Assert.assertTrue(openPositionsQAPage.isPageLoaded(), "Open Positions Page is not loaded");
+        Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed(), "Positions section is not displayed");
+        Assert.assertTrue(openPositionsQAPage.verifyViewRole(), "View Role button is not functional");
     }
 }
