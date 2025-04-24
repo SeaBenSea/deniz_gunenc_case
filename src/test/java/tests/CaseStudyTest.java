@@ -64,8 +64,9 @@ public class CaseStudyTest extends BaseTest {
     }
 
     @Test(testName = "redirects to Lever when View Role clicked on job card")
-    public void fifthTest(){
+    public void fifthTest() {
         OpenPositionsQAPage openPositionsQAPage = new OpenPositionsQAPage(driver).open();
+        openPositionsQAPage.acceptCookieConsentBanner();
 
         Assert.assertTrue(openPositionsQAPage.isPageLoaded());
         Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed());

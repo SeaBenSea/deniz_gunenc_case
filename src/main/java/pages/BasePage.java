@@ -18,15 +18,12 @@ public abstract class BasePage {
     protected final WebDriverWait wait;
     protected final JavascriptExecutor jsExecutor;
     protected final Actions actions;
-
+    @FindBy(xpath = "//*[text() = 'Accept All']")
+    public WebElement buttonCookieConsentAcceptAll;
     @FindBy(css = "img[alt$='_logo']")
     private WebElement logo;
-
     @FindBy(id = "navigation")
     private WebElement navbar;
-
-    @FindBy(css = "[aria-label = 'cookieconsent']")
-    private WebElement cookieConsentBanner;
 
     protected BasePage(WebDriver driver) {
         this.driver = driver;
@@ -96,7 +93,7 @@ public abstract class BasePage {
 
     public boolean isPageLoaded(String... url) {
         boolean isUrlValid = url.length == 0 || (driver.getCurrentUrl() != null && driver.getCurrentUrl().contains(url[0]));
-        return isUrlValid && isLogoLoaded() && isNavbarLoaded() && isCookieConsentDisplayed();
+        return isUrlValid && isLogoLoaded() && isNavbarLoaded();
     }
 
     private boolean isLogoLoaded() {
@@ -107,8 +104,10 @@ public abstract class BasePage {
         return isDisplayed(navbar);
     }
 
-    private boolean isCookieConsentDisplayed() {
-        return isDisplayed(cookieConsentBanner);
+    public void acceptCookieConsentBanner() {
+        if (isDisplayed(buttonCookieConsentAcceptAll)) {
+            click(buttonCookieConsentAcceptAll);
+        }
     }
 
     protected void switchLastTab() {

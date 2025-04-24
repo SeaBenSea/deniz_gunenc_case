@@ -39,6 +39,7 @@ public class BaseTest {
                 "--remote-allow-origins=*",
                 "--disable-popup-blocking",
                 "--no-sandbox",
+                "--disable-dev-shm-usage",
                 "--ignore-certificate-errors",
                 "--ignore-certificate-errors-spki-list",
                 "--suppress-message-center-popups"
