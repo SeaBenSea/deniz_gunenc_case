@@ -47,7 +47,7 @@ public class BaseTest {
         options.setAcceptInsecureCerts(true);
 
         boolean isHeadless = Boolean.parseBoolean(headless);
-        boolean isCI = Boolean.getBoolean("ci");
+        boolean isCI = Boolean.parseBoolean(System.getenv().getOrDefault("CI", "false"));
 
         if (isHeadless || isCI) {
             options.addArguments("--headless=new");

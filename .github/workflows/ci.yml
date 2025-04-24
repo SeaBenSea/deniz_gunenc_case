@@ -32,7 +32,7 @@ jobs:
         run: chmod +x mvnw
         
       - name: Build & test
-        run: ./mvnw -B test -DsuiteXmlFile=testng.xml -Dci=true
+        run: ./mvnw -B test -DsuiteXmlFile=testng.xml
 
       - name: Archive test results
         if: always()
