@@ -93,8 +93,9 @@ public abstract class BasePage {
         throw new IllegalArgumentException("Unsupported reference type: " + ref.getClass().getName());
     }
 
-    public boolean isPageLoaded() {
-        return isLogoLoaded() && isNavbarLoaded() && isCookieConsentDisplayed();
+    public boolean isPageLoaded(String... url) {
+        boolean isUrlValid = url.length == 0 || (driver.getCurrentUrl() != null && driver.getCurrentUrl().contains(url[0]));
+        return isUrlValid && isLogoLoaded() && isNavbarLoaded() && isCookieConsentDisplayed();
     }
 
     private boolean isLogoLoaded() {

@@ -9,8 +9,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.List;
 
 public class CareersPage extends BasePage {
-    By jobItemLocator = By.xpath("//div[contains(@class, 'job-item')]");
-    int initialJobCount = driver.findElements(jobItemLocator).size();
+    final By jobItemLocator = By.xpath("//div[contains(@class, 'job-item')]");
+    final int initialJobCount = driver.findElements(jobItemLocator).size();
 
     @FindBy(id = "career-find-our-calling")
     private WebElement teamsSection;
