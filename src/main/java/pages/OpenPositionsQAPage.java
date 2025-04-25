@@ -1,5 +1,6 @@
 package pages;
 
+import config.Urls;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -7,14 +8,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.List;
 
 public class OpenPositionsQAPage extends BasePage {
-    private static final String ENCODED_URL = "aHR0cHM6Ly91c2VpbnNpZGVyLmNvbS9jYXJlZXJzL29wZW4tcG9zaXRpb25z";
-    private static final String URL = new String(Base64.getDecoder().decode(ENCODED_URL), StandardCharsets.UTF_8);
-    private static final String LEVER_DOMAIN = "jobs.lever.co";
 
     private static final By TITLE = By.cssSelector(".position-title");
     private static final By DEPARTMENT = By.cssSelector(".position-department");
@@ -44,7 +40,7 @@ public class OpenPositionsQAPage extends BasePage {
     }
 
     public OpenPositionsQAPage open() {
-        driver.get(URL);
+        driver.get(Urls.OPEN_POS_QA);
         return this;
     }
 
@@ -71,7 +67,7 @@ public class OpenPositionsQAPage extends BasePage {
     }
 
     public boolean areFiltersAppliedCorrectly(String location, String department) {
-        return location.equals(filterLocationBtn.getAttribute("title")) && department.equals(filterDepartmentBtn.getAttribute("title"));
+        return location.equals(filterLocationBtn.getDomAttribute("title")) && department.equals(filterDepartmentBtn.getDomAttribute("title"));
     }
 
     public boolean jobListMatches(String location, String department) {
@@ -98,13 +94,13 @@ public class OpenPositionsQAPage extends BasePage {
         jsClick(linkViewRoleFirst);
 
         switchLastTab();
-        wait.until(ExpectedConditions.urlContains(LEVER_DOMAIN));
+        wait.until(ExpectedConditions.urlContains(Urls.LEVER));
 
         String currentUrl = driver.getCurrentUrl();
 
         closeTab();
         switchToMainTab();
 
-        return currentUrl != null && currentUrl.contains(LEVER_DOMAIN);
+        return currentUrl != null && currentUrl.contains(Urls.LEVER);
     }
 }

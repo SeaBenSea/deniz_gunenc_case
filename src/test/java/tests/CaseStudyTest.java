@@ -1,5 +1,6 @@
 package tests;
 
+import config.TestData;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.CareersPage;
@@ -9,9 +10,6 @@ import pages.OpenPositionsQAPage;
 
 // TODO: Remove hardcoded strings from tests
 public class CaseStudyTest extends BaseTest {
-    private static final String optionLocationValue = "Istanbul, Turkiye";
-    private static final String optionDepartmentValue = "Quality Assurance";
-
     @Test(testName = "should load Home Page")
     public void firstTest() {
         HomePage homePage = new HomePage(driver).open();
@@ -40,10 +38,10 @@ public class CaseStudyTest extends BaseTest {
         Assert.assertTrue(openPositionsQAPage.isPageLoaded("open-positions/?department=qualityassurance"), "Open Positions Page is not loaded");
         Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed(), "Positions section is not displayed");
 
-        openPositionsQAPage.filterByLocation(optionLocationValue);
-        openPositionsQAPage.filterByDepartment(optionDepartmentValue);
+        openPositionsQAPage.filterByLocation(TestData.LOCATION_ISTANBUL);
+        openPositionsQAPage.filterByDepartment(TestData.DEPARTMENT_QA);
 
-        Assert.assertTrue(openPositionsQAPage.areFiltersAppliedCorrectly(optionLocationValue, optionDepartmentValue), "Filters are not applied correctly");
+        Assert.assertTrue(openPositionsQAPage.areFiltersAppliedCorrectly(TestData.LOCATION_ISTANBUL, TestData.DEPARTMENT_QA), "Filters are not applied correctly");
         Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed(), "Positions section is not displayed");
     }
 
@@ -54,12 +52,12 @@ public class CaseStudyTest extends BaseTest {
         Assert.assertTrue(openPositionsQAPage.isPageLoaded(), "Open Positions Page is not loaded");
         Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed(), "Positions section is not displayed");
 
-        openPositionsQAPage.filterByLocation(optionLocationValue);
-        openPositionsQAPage.filterByDepartment(optionDepartmentValue);
+        openPositionsQAPage.filterByLocation(TestData.LOCATION_ISTANBUL);
+        openPositionsQAPage.filterByDepartment(TestData.DEPARTMENT_QA);
 
-        Assert.assertTrue(openPositionsQAPage.areFiltersAppliedCorrectly(optionLocationValue, optionDepartmentValue), "Filters are not applied correctly");
+        Assert.assertTrue(openPositionsQAPage.areFiltersAppliedCorrectly(TestData.LOCATION_ISTANBUL, TestData.DEPARTMENT_QA), "Filters are not applied correctly");
         Assert.assertTrue(openPositionsQAPage.isPositionsSectionDisplayed(), "Positions section is not displayed");
-        Assert.assertTrue(openPositionsQAPage.jobListMatches(optionLocationValue, optionDepartmentValue), "Job list does not match filters");
+        Assert.assertTrue(openPositionsQAPage.jobListMatches(TestData.LOCATION_ISTANBUL, TestData.DEPARTMENT_QA), "Job list does not match filters");
     }
 
     @Test(testName = "redirects to Lever when View Role clicked on job card")

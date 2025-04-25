@@ -46,7 +46,7 @@ Tests run both locally (headed / headless) and on CI (GitHub Actions) using Mave
 | Test Runner    | **TestNG 7.10.2**            | Parallel‑ready, flexible configuration           |
 | Design Pattern | **Page Object Model (POM)**  | Reusable page abstractions                       |
 | CI             | **GitHub Actions**           | See `.github/workflows/ci.yml`                   |
-| Optional       | **Selenoid + browsers.json** | Run tests inside Dockerised Chrome 99 VNC images |
+| Optional       | **Selenoid + browsers.json** | Run tests inside Dockerized Chrome 99 VNC images |
 
 ---
 

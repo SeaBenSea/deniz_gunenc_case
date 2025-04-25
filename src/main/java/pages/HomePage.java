@@ -1,15 +1,12 @@
 package pages;
 
+import config.Urls;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
 
-import java.util.Base64;
-
 public class HomePage extends BasePage {
-    private static final String ENCODED_URL = "aHR0cHM6Ly91c2VpbnNpZGVyLmNvbS8=";
-
     @FindBy(xpath = "//a[@id='navbarDropdownMenuLink' and contains(text(),'Company')]")
     private WebElement companyDropdown;
 
@@ -21,8 +18,7 @@ public class HomePage extends BasePage {
     }
 
     public HomePage open() {
-        String decodedUrl = new String(Base64.getDecoder().decode(ENCODED_URL));
-        driver.get(decodedUrl);
+        driver.get(Urls.HOME);
 
         return this;
     }
